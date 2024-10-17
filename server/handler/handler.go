@@ -33,14 +33,14 @@ func (h Handler) ListBooks(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		books, err := h.assessClient.GetBooks()
 		if err != nil {
-			http.Error(w, "failed to fetch books", 500)
+			http.Error(w, fmt.Errorf("failed to fetch books, %s", err.Error()), 500)
 			return
 		}
 
 		w.Header().Set("Content-Type", "application/json")
 		resp, err := json.Marshal(books)
 		if err != nil {
-			http.Error(w, "failed to marshal books to resp", 500)
+			http.Error(w, fmt.Errorf("failed to marshal books to resp, %s", err.Error()), 500)
 			return
 		}
 
