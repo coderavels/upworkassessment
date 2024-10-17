@@ -45,7 +45,6 @@ func (h Handler) ListBooks(w http.ResponseWriter, r *http.Request) {
 		}
 
 		w.Write(resp)
-		w.WriteHeader(http.StatusOK)
 		return
 	}
 
@@ -100,7 +99,6 @@ func (h Handler) GetBookCollection(w http.ResponseWriter, r *http.Request) {
 		}
 
 		w.Write(resp)
-		w.WriteHeader(http.StatusOK)
 
 		return
 	}
