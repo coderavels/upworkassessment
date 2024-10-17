@@ -30,7 +30,7 @@ func main() {
 
 	log.Println("Started on port", portNum)
 
-	err := http.ListenAndServe(portNum, nil)
+	err = http.ListenAndServe(portNum, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,7 +41,7 @@ func initializeAssessClient() handler.AssessClient {
 	assessClientPassword := os.Getenv("ASSESS_CLIENT_PASSWORD")
 	assessClientBaseURL := os.Getenv("ASSESS_CLIENT_BASEURL")
 
-	return client.NewAssessClient(AssessClientParams{
+	return client.NewAssessClient(client.AssessClientParams{
 		BaseURL:  assessClientBaseURL,
 		Username: assessClientUsername,
 		Password: assessClientPassword,
