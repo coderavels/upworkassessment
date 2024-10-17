@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io/io"
 	"net/http"
 )
 
@@ -62,7 +62,7 @@ func (ac AssessClient) GetBooks() ([]Book, error) {
 		return nil, err
 	}
 
-	resBody, err := ioutil.ReadAll(res.Body)
+	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func (ac AssessClient) GetBook(bookISBN string) (BookDetails, error) {
 		return BookDetails{}, err
 	}
 
-	resBody, err := ioutil.ReadAll(res.Body)
+	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return BookDetails{}, err
 	}

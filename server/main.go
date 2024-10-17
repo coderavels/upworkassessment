@@ -49,7 +49,7 @@ func initializeAssessClient() handler.AssessClient {
 }
 
 func initializeHandler(ac handler.AssessClient) Handler {
-	return handler.NewHandler(HandlerParams{
+	return handler.NewHandler(handler.HandlerParams{
 		AssessClient: ac,
 	})
 }
