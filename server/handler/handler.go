@@ -26,7 +26,7 @@ func NewHandler(params HandlerParams) Handler {
 
 type AssessClient interface {
 	GetBooks() ([]client.Book, error)
-	GetBook(bookISBN string) (client.BookDetail, error)
+	GetBook(bookISBN string) (client.BookDetails, error)
 }
 
 func (h Handler) ListBooks(w http.ResponseWriter, r *http.Request) {
@@ -62,7 +62,7 @@ func (h Handler) GetBookCollection(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, fmt.Sprintf("failed to parse width query arg %s, %s", widthQVal, err.Error()), 400)
 			return
 		}
-		var bookCollection []client.BookDetail
+		var bookCollection []client.BookDetails
 		seenBooks := map[string]struct{}{}
 
 		bookISBN := r.PathValue("bookISBN")
@@ -109,11 +109,11 @@ func (h Handler) GetBookCollection(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func organiseCollectionInShelves(bookCollection []client.BookDetail, width int) ([][]BookDetails, error) {
+func organiseCollectionInShelves(bookCollection []client.BookDetails, width int) ([][]BookDetails, error) {
 	booksAlreadyShelved := map[string]struct{}{}
-	var organisedCollection [][]BookDetail
+	var organisedCollection [][]client.BookDetails
 
-	var booksLeftToBeShelved []client.BookDetail
+	var booksLeftToBeShelved []client.BookDetails
 	for _, b := range bookCollection {
 		booksLeftToBeShelved = append(booksLeftToBeShelved, b)
 	}
@@ -133,7 +133,7 @@ func organiseCollectionInShelves(bookCollection []client.BookDetail, width int) 
 			booksAlreadyShelved[b.ISBN] = struct{}{}
 		}
 
-		var booksLeftAfterThisIteration []client.BookDetail
+		var booksLeftAfterThisIteration []client.BookDetails
 		for _, b := range booksLeftToBeShelved {
 			if _, ok := booksAlreadyShelved[b.ISBN]; !ok {
 				booksLeftAfterThisIteration = append(booksLeftAfterThisIteration, b)
@@ -146,7 +146,7 @@ func organiseCollectionInShelves(bookCollection []client.BookDetail, width int) 
 	return organisedCollection, nil
 }
 
-func fillShelfToMax(booksToShelve []client.BookDetail, shelfWidth int) ([]BookDetails, error) {
+func fillShelfToMax(booksToShelve []client.BookDetails, shelfWidth int) ([]BookDetails, error) {
 	N := len(booksToShelve)
 	maxWidthCovered := make([]int, shelfWidth+1)
 	prevBookIdx := make([]int, shelfWidth+1)
@@ -170,7 +170,7 @@ func fillShelfToMax(booksToShelve []client.BookDetail, shelfWidth int) ([]BookDe
 
 	maxWidthCoveredOnShelf := maxWidthCovered[shelfWidth]
 
-	var shelvedBooks []client.BookDetail
+	var shelvedBooks []client.BookDetails
 	for i := shelfWidth; i > 0 && maxWidthCoveredOnShelf > 0; {
 		if prevBookIdx[i] != -1 {
 			shelvedBook := booksToShelve[prevBookIdx[i]]
