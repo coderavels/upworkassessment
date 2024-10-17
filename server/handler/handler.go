@@ -109,7 +109,7 @@ func (h Handler) GetBookCollection(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func organiseCollectionInShelves(bookCollection []client.BookDetails, width int) ([][]BookDetails, error) {
+func organiseCollectionInShelves(bookCollection []client.BookDetails, width int) ([][]client.BookDetails, error) {
 	booksAlreadyShelved := map[string]struct{}{}
 	var organisedCollection [][]client.BookDetails
 
@@ -146,7 +146,7 @@ func organiseCollectionInShelves(bookCollection []client.BookDetails, width int)
 	return organisedCollection, nil
 }
 
-func fillShelfToMax(booksToShelve []client.BookDetails, shelfWidth int) ([]BookDetails, error) {
+func fillShelfToMax(booksToShelve []client.BookDetails, shelfWidth int) ([]client.BookDetails, error) {
 	N := len(booksToShelve)
 	maxWidthCovered := make([]int, shelfWidth+1)
 	prevBookIdx := make([]int, shelfWidth+1)
