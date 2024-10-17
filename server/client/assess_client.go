@@ -137,3 +137,31 @@ func (b *Book) UnmarshalJSON(data []byte) error {
 
 	return nil
 }
+
+func (b *BookDetails) UnmarshalJSON(data []byte) error {
+	// Define a shadow struct to unmarshal everything except Title by default
+	type Alias BookDetails
+	aux := &struct {
+		Title interface{} `json:"title"`
+		*Alias
+	}{
+		Alias: (*Alias)(b),
+	}
+
+	// Perform default unmarshalling
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+
+	// Handle Title separately
+	switch v := aux.Title.(type) {
+	case string:
+		b.Title = v
+	case float64:
+		b.Title = strconv.Itoa(int(v))
+	default:
+		b.Title = "unknown"
+	}
+
+	return nil
+}
