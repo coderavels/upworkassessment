@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 
 	"github.com/joho/godotenv"
 
@@ -30,7 +32,22 @@ func main() {
 
 	log.Println("Started on port", portNum)
 
-	err = http.ListenAndServe(portNum, nil)
+	server := &http.Server{Addr: portNum}
+
+	go func() {
+		err = server.ListenAndServe()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt)
+
+	// Waiting for SIGINT (kill -2)
+	<-stop
+
+	err = server.Shutdown(context.TODO())
 	if err != nil {
 		log.Fatal(err)
 	}
