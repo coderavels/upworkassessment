@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 )
 
 type Book struct {
@@ -107,4 +108,32 @@ func (ac AssessClient) GetBook(bookISBN string) (BookDetails, error) {
 func basicAuth(username, password string) string {
 	auth := username + ":" + password
 	return base64.StdEncoding.EncodeToString([]byte(auth))
+}
+
+func (b *Book) UnmarshalJSON(data []byte) error {
+	// Define a shadow struct to unmarshal everything except Title by default
+	type Alias Book
+	aux := &struct {
+		Title interface{} `json:"title"`
+		*Alias
+	}{
+		Alias: (*Alias)(b),
+	}
+
+	// Perform default unmarshalling
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+
+	// Handle Title separately
+	switch v := aux.Title.(type) {
+	case string:
+		b.Title = v
+	case float64:
+		b.Title = strconv.Itoa(int(v))
+	default:
+		b.Title = "unknown"
+	}
+
+	return nil
 }
