@@ -139,7 +139,7 @@ func (h Handler) getBookCollectionFromClient(bookISBN string) ([]client.BookDeta
 
 		bookDetails, err := h.assessClient.GetBook(bookISBN)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("error while get book %s, %w", bookISBN, err)
 		}
 
 		booksInCollection = append(booksInCollection, bookDetails)

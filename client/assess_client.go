@@ -19,7 +19,7 @@ type BookDetails struct {
 	ISBN       string `json:"isbn"`
 	Publisher  string `json:"publisher"`
 	Height     string `json:"height"`
-	Published  int    `json:"published"`
+	Published  string `json:"published"`
 	Author     string `json:"author"`
 	Related    string `json:"related"`
 	Collection string `json:"collection"`
@@ -142,7 +142,8 @@ func (b *BookDetails) UnmarshalJSON(data []byte) error {
 	// Define a shadow struct to unmarshal everything except Title by default
 	type Alias BookDetails
 	aux := &struct {
-		Title interface{} `json:"title"`
+		Title     interface{} `json:"title"`
+		Published interface{} `json:"published"`
 		*Alias
 	}{
 		Alias: (*Alias)(b),
@@ -161,6 +162,16 @@ func (b *BookDetails) UnmarshalJSON(data []byte) error {
 		b.Title = strconv.Itoa(int(v))
 	default:
 		b.Title = "unknown"
+	}
+
+	// Handle Published separately
+	switch v := aux.Published.(type) {
+	case string:
+		b.Published = v
+	case float64:
+		b.Published = strconv.Itoa(int(v))
+	default:
+		b.Published = "unknown"
 	}
 
 	return nil
