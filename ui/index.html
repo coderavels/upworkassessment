@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Bookshelf Layout</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<h1>Dynamic Bookshelves</h1>
+	<div id = "controls">
+		<label for="bookCollection">Choose a book collection:</label>
+		<select id="bookCollection"></select>
+
+		<label for="maxWidth">Max Width (cm):</label>
+		<input type="number" id="maxWidth" min="1" placeholder="Enter shelf width">
+
+		<button id="loadShelf">Load Shelf</button>
+	</div>
+	<div id="shelvesContainer"></div>
+
+	<script src="scripts.js"></script>
+</body>
+</html>

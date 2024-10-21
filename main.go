@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -13,8 +14,6 @@ import (
 	"github.com/coderavels/upworkassessment/server/handler"
 )
 
-const portNum string = ":8021"
-
 type Handler interface {
 	ListBooks(w http.ResponseWriter, r *http.Request)
 	GetBookCollection(w http.ResponseWriter, r *http.Request)
@@ -24,11 +23,23 @@ func main() {
 	log.Println("Starting our bookshelf backend server")
 	err := godotenv.Load()
 
+	port := os.Getenv("PORT")
+	portNum := fmt.Sprintf(":%s", port)
+
 	ac := initializeAssessClient()
 	h := initializeHandler(ac)
 
-	http.HandleFunc("/books", h.ListBooks)
-	http.HandleFunc("/collection/{bookISBN}", h.GetBookCollection)
+	// ui paths
+	// index.html
+	http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "ui/index.html")
+	})
+	// server static assets from "ui/static" directory
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("ui/static"))))
+
+	// api paths
+	http.HandleFunc("/api/v1/books", h.ListBooks)
+	http.HandleFunc("/api/v1/collection/{bookISBN}", h.GetBookCollection)
 
 	log.Println("Started on port", portNum)
 
