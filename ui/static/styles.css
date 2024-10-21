@@ -1,118 +1,135 @@
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
 }
 
 #controls {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 #shelvesContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  align-content: center;
 }
 
 .bookshelf {
-    width: 45%;
-    /* margin-bottom: 30px; */
-    padding: 10px;
-    margin: 20px 0;
-    border: 2px solid #7c4a20; /* Make it look like wood */
-    border-radius: 5px;
-    background-color: #d7b899;
+  width: 45%;
+  /* margin-bottom: 30px; */
+  padding: 10px;
+  margin: 20px 0;
+  border: 2px solid #7c4a20;
+  /* Make it look like wood */
+  border-radius: 5px;
+  background-color: #d7b899;
 }
 
 .shelf {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 5px 0;
-    border-bottom: 1px solid black;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid black;
 }
 
 .book {
-    height: 200px; /* Set a fixed height for vertical appearance */
-    margin: 0 4px; /* Space between books */
-    border-radius: 5px; /* Rounded edges for realism */
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Aligns content at the center */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Adds shadow for depth */
-    transition: transform 0.3s ease; /* Smooth transition for hover effect */
-    text-wrap: balance;
+  height: 200px;
+  /* Set a fixed height for vertical appearance */
+  margin: 0 4px;
+  /* Space between books */
+  border-radius: 5px;
+  /* Rounded edges for realism */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Aligns content at the center */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  /* Adds shadow for depth */
+  transition: transform 0.3s ease;
+  /* Smooth transition for hover effect */
+  text-wrap: balance;
 }
 
 .book:hover {
-    transform: translateY(-5px); /* Slight lift effect on hover */
+  transform: translateY(-5px);
+  /* Slight lift effect on hover */
 }
 
 .book::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 20px; /* Height of the gradient effect */
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent);
-    border-radius: 5px 5px 0 0; /* Rounded edges for the top */
-    z-index: 1; /* Place it above the book color */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  /* Height of the gradient effect */
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent);
+  border-radius: 5px 5px 0 0;
+  /* Rounded edges for the top */
+  z-index: 1;
+  /* Place it above the book color */
 }
 
 
 .tooltip {
-    position: absolute;
-    top: -30px;
-    left: 0;
-    background-color: #333;
-    color: #fff;
-    padding: 5px;
-    border-radius: 3px;
-    font-size: 12px;
-    display: none;
-    width: max-content;
+  position: absolute;
+  top: -30px;
+  left: 0;
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  display: none;
+  width: max-content;
 }
 
 .book:hover .tooltip {
-    display: block;
+  display: block;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .bookshelf {
-        width: 100%;
-    }
+  .bookshelf {
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
-    .book {
-        height: 100px;
-    }
+  .book {
+    height: 100px;
+  }
 }
 
 /* creating css loader */
 
 #loading {
-    width: 2rem;
-    height: 2rem;
-    border: 5px solid #f3f3f3;
-    border-top: 6px solid #9c41f2;
-    border-radius: 100%;
-    margin: auto;
-    visibility: hidden;
-    animation: spin 1s infinite linear;
+  width: 2rem;
+  height: 2rem;
+  border: 5px solid #f3f3f3;
+  border-top: 6px solid #9c41f2;
+  border-radius: 100%;
+  margin: auto;
+  visibility: hidden;
+  animation: spin 1s infinite linear;
 }
+
 #loading.display {
-    visibility: visible;
+  visibility: visible;
 }
+
 @keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
+

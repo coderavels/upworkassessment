@@ -42,6 +42,11 @@ type BookDetails struct {
 	Width string `json:"width"`
 }
 
+type GetBookCollectionResponse struct {
+	Shelves      [][]BookDetails `json:"shelves"`
+	TotalShelves int             `json:"total_shelves"`
+}
+
 func (h Handler) ListBooks(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		books, err := h.assessClient.GetBooks()
@@ -109,9 +114,13 @@ func (h Handler) GetBookCollection(w http.ResponseWriter, r *http.Request) {
 			}
 			shelves = append(shelves, shelf)
 		}
+		response := GetBookCollectionResponse{
+			Shelves:      shelves,
+			TotalShelves: len(shelves),
+		}
 
 		w.Header().Set("Content-Type", "application/json")
-		resp, err := json.Marshal(shelves)
+		resp, err := json.Marshal(response)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to marshal collection to resp, %s", err.Error()), 500)
 			return

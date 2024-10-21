@@ -59,10 +59,10 @@ loader.classList.remove("display");
 
 function renderBookshelves(shelves, maxWidth) {
   const shelvesContainer = document.getElementById("shelvesContainer");
-  shelvesContainer.innerHTML = "";
+    shelvesContainer.innerHTML = `Total Shelves: ${shelves.total_shelves}`;
 
   let shelfCounter = 0;
-  shelves.forEach((shelf, index) => {
+  shelves.shelves.forEach((shelf, index) => {
     console.log(shelf);
     if (index % 5 === 0) {
       const bookshelf = document.createElement("div");
