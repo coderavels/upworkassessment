@@ -210,7 +210,7 @@ func fillShelfToMax(booksToShelve []client.BookDetails, shelfWidth int) ([]clien
 	maxWidthCoveredOnShelf := maxWidthCovered[shelfWidth]
 
 	var shelvedBooks []client.BookDetails
-	for i := shelfWidth; i > 0 && maxWidthCoveredOnShelf > 0; {
+	for i := maxWidthCovered[shelfWidth]; i > 0 && maxWidthCoveredOnShelf > 0; {
 		if prevBookIdx[i] != -1 {
 			shelvedBook := booksToShelve[prevBookIdx[i]]
 			bookWidth, err := strconv.Atoi(strings.TrimSuffix(shelvedBook.Width, "cm"))

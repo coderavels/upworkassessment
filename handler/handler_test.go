@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"strconv"
+	"strings"
 	"testing"
 
 	"github.com/coderavels/upworkassessment/client"
@@ -79,5 +81,24 @@ func TestOrganiseCollectionInShelves(t *testing.T) {
 		}, 50)
 		assert.NoError(t, err)
 		assert.Equal(t, 2, len(organisedCollection))
+		assert.Equal(t, 5, len(organisedCollection[0]))
+		firstRowSum := 0
+
+		for _, b := range organisedCollection[0] {
+			bookWidth, err := strconv.Atoi(strings.TrimSuffix(b.Width, "cm"))
+			assert.NoError(t, err)
+			firstRowSum += bookWidth
+		}
+		assert.Equal(t, 50, firstRowSum)
+
+		secondRowSum := 0
+
+		for _, b := range organisedCollection[1] {
+			bookWidth, err := strconv.Atoi(strings.TrimSuffix(b.Width, "cm"))
+			assert.NoError(t, err)
+			secondRowSum += bookWidth
+		}
+		assert.Equal(t, 33, secondRowSum)
 	})
+
 }
