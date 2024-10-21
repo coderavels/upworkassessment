@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -175,6 +176,9 @@ func organiseCollectionInShelves(bookCollection []client.BookDetails, width int)
 			return nil, fmt.Errorf("error while filling shelf to maximum, %w", err)
 		}
 
+		slices.SortFunc(booksOnShelf, func(a, b client.BookDetails) int {
+			return strings.Compare(strings.ToLower(a.Title), strings.ToLower(b.Title))
+		})
 		organisedCollection = append(organisedCollection, booksOnShelf)
 
 		for _, b := range booksOnShelf {
