@@ -10,9 +10,11 @@ import (
 
 	"github.com/joho/godotenv"
 
-	"github.com/coderavels/upworkassessment/server/client"
-	"github.com/coderavels/upworkassessment/server/handler"
+	"github.com/coderavels/upworkassessment/client"
+	"github.com/coderavels/upworkassessment/handler"
 )
+
+//go:generate go run go.uber.org/mock/mockgen -source=./main.go -destination=./mocks/mock.go -package=mocks . Handler
 
 type Handler interface {
 	ListBooks(w http.ResponseWriter, r *http.Request)

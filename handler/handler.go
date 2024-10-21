@@ -7,8 +7,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/coderavels/upworkassessment/server/client"
+	"github.com/coderavels/upworkassessment/client"
 )
+
+//go:generate go run go.uber.org/mock/mockgen -source=./handler.go -destination=./mocks/mock_handler.go -package=mocks . AssessClient
 
 type HandlerParams struct {
 	AssessClient AssessClient
@@ -80,31 +82,16 @@ func (h Handler) GetBookCollection(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, fmt.Sprintf("failed to parse width query arg %s, %s", widthQVal, err.Error()), 400)
 			return
 		}
-		var bookCollection []client.BookDetails
-		seenBooks := map[string]struct{}{}
 
 		bookISBN := r.PathValue("bookISBN")
 
-		for {
-			if bookISBN == "" {
-				break
-			}
-			if _, ok := seenBooks[bookISBN]; ok {
-				break
-			}
-
-			bookDetails, err := h.assessClient.GetBook(bookISBN)
-			if err != nil {
-				http.Error(w, fmt.Sprintf("failed while getting book details for %s, %s", bookISBN, err.Error()), 500)
-				return
-			}
-
-			bookCollection = append(bookCollection, bookDetails)
-			seenBooks[bookISBN] = struct{}{}
-			bookISBN = bookDetails.Related
+		booksInCollection, err := h.getBookCollectionFromClient(bookISBN)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("failed while getting book collection for %s, %s", bookISBN, err.Error()), 500)
+			return
 		}
 
-		organisedCollection, err := organiseCollectionInShelves(bookCollection, width)
+		organisedCollection, err := organiseCollectionInShelves(booksInCollection, width)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("error while organising collection in shelves, %s", err.Error()), 500)
 			return
@@ -139,14 +126,36 @@ func (h Handler) GetBookCollection(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func (h Handler) getBookCollectionFromClient(bookISBN string) ([]client.BookDetails, error) {
+	var booksInCollection []client.BookDetails
+	seenBooks := map[string]struct{}{}
+	for {
+		if bookISBN == "" {
+			break
+		}
+		if _, ok := seenBooks[bookISBN]; ok {
+			break
+		}
+
+		bookDetails, err := h.assessClient.GetBook(bookISBN)
+		if err != nil {
+			return nil, err
+		}
+
+		booksInCollection = append(booksInCollection, bookDetails)
+		seenBooks[bookISBN] = struct{}{}
+		bookISBN = bookDetails.Related
+	}
+
+	return booksInCollection, nil
+}
+
 func organiseCollectionInShelves(bookCollection []client.BookDetails, width int) ([][]client.BookDetails, error) {
 	booksAlreadyShelved := map[string]struct{}{}
 	var organisedCollection [][]client.BookDetails
 
 	var booksLeftToBeShelved []client.BookDetails
-	for _, b := range bookCollection {
-		booksLeftToBeShelved = append(booksLeftToBeShelved, b)
-	}
+	booksLeftToBeShelved = append(booksLeftToBeShelved, bookCollection...)
 
 	for {
 		if len(booksLeftToBeShelved) == 0 {
