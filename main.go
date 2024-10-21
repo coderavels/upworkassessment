@@ -31,7 +31,7 @@ func main() {
 
 	// ui paths
 	// index.html
-	http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./ui/index.html")
 	})
 	// server static assets from "ui/static" directory

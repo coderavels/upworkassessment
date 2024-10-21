@@ -29,6 +29,17 @@ type AssessClient interface {
 	GetBook(bookISBN string) (client.BookDetails, error)
 }
 
+type Book struct {
+	Title string `json:"title"`
+	ISBN  string `json:"isbn"`
+}
+
+type BookDetails struct {
+	Title string `json:"title"`
+	ISBN  string `json:"isbn"`
+	Width string `json:"width"`
+}
+
 func (h Handler) ListBooks(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		books, err := h.assessClient.GetBooks()
@@ -37,8 +48,16 @@ func (h Handler) ListBooks(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		var listBooksResponse []Book
+		for _, b := range books {
+			listBooksResponse = append(listBooksResponse, Book{
+				Title: b.Title,
+				ISBN:  b.ISBN,
+			})
+		}
+
 		w.Header().Set("Content-Type", "application/json")
-		resp, err := json.Marshal(books)
+		resp, err := json.Marshal(listBooksResponse)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to marshal books to resp, %s", err.Error()), 500)
 			return
@@ -91,8 +110,21 @@ func (h Handler) GetBookCollection(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		var shelves [][]BookDetails
+		for _, oc := range organisedCollection {
+			var shelf []BookDetails
+			for _, b := range oc {
+				shelf = append(shelf, BookDetails{
+					Title: b.Title,
+					ISBN:  b.ISBN,
+					Width: b.Width,
+				})
+			}
+			shelves = append(shelves, shelf)
+		}
+
 		w.Header().Set("Content-Type", "application/json")
-		resp, err := json.Marshal(organisedCollection)
+		resp, err := json.Marshal(shelves)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("failed to marshal collection to resp, %s", err.Error()), 500)
 			return

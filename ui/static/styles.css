@@ -3,3 +3,91 @@ body {
     text-align: center;
     padding: 20px;
 }
+
+#controls {
+    margin-bottom: 20px;
+}
+
+#shelvesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+.bookshelf {
+    width: 45%;
+    /* margin-bottom: 30px; */
+    padding: 10px;
+    margin: 20px 0;
+    border: 2px solid #7c4a20; /* Make it look like wood */
+    border-radius: 5px;
+    background-color: #d7b899;
+}
+
+.shelf {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid black;
+}
+
+.book {
+    height: 200px; /* Set a fixed height for vertical appearance */
+    margin: 0 4px; /* Space between books */
+    border-radius: 5px; /* Rounded edges for realism */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Aligns tooltip at the bottom */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Adds shadow for depth */
+    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.book:hover {
+    transform: translateY(-5px); /* Slight lift effect on hover */
+}
+
+.book::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20px; /* Height of the gradient effect */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent);
+    border-radius: 5px 5px 0 0; /* Rounded edges for the top */
+    z-index: 1; /* Place it above the book color */
+}
+
+
+.tooltip {
+    position: absolute;
+    top: -30px;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    display: none;
+    width: max-content;
+}
+
+.book:hover .tooltip {
+    display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .bookshelf {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .book {
+        height: 100px;
+    }
+}
