@@ -32,10 +32,10 @@ func main() {
 	// ui paths
 	// index.html
 	http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "ui/index.html")
+		http.ServeFile(w, r, "./ui/index.html")
 	})
 	// server static assets from "ui/static" directory
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("ui/static"))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./ui/static"))))
 
 	// api paths
 	http.HandleFunc("/api/v1/books", h.ListBooks)
