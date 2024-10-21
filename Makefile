@@ -1,8 +1,11 @@
 setup:
 	go mod tidy -v
 
-start:
-	go run main.go
+start: build
+	./virtualbookstore
+
+build:
+	go build -o virtualbookstore
 
 generate:
 	go generate ./... 
