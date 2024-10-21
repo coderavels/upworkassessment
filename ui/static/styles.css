@@ -40,9 +40,10 @@ body {
     position: relative;
     display: flex;
     justify-content: center;
-    align-items: flex-end; /* Aligns tooltip at the bottom */
+    align-items: center; /* Aligns content at the center */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Adds shadow for depth */
     transition: transform 0.3s ease; /* Smooth transition for hover effect */
+    text-wrap: balance;
 }
 
 .book:hover {
@@ -89,5 +90,29 @@ body {
 @media (max-width: 480px) {
     .book {
         height: 100px;
+    }
+}
+
+/* creating css loader */
+
+#loading {
+    width: 2rem;
+    height: 2rem;
+    border: 5px solid #f3f3f3;
+    border-top: 6px solid #9c41f2;
+    border-radius: 100%;
+    margin: auto;
+    visibility: hidden;
+    animation: spin 1s infinite linear;
+}
+#loading.display {
+    visibility: visible;
+}
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
     }
 }

@@ -2,9 +2,11 @@
 
 // Initialize dropdown with dummy book collections
 window.onload = () => {
+  displayLoading()
   fetch("/api/v1/books")
     .then((response) => response.json())
     .then((data) => {
+      hideLoading();
       const dropdown = document.getElementById("bookCollection");
       data.forEach((collection) => {
         const option = document.createElement("option");
@@ -18,18 +20,32 @@ window.onload = () => {
 document.getElementById("loadShelf").addEventListener("click", () => {
   const selectedCollection = document.getElementById("bookCollection").value;
   const width = parseFloat(document.getElementById("maxWidth").value);
-
-  if (!selectedCollection || !maxWidth) {
-    alert("Please select a book collection and enter a valid max width.");
+  if (!selectedCollection || !width) {
+    alert("Please select a book and enter a valid shelf width.");
     return;
   }
 
+  displayLoading();
   fetch(`/api/v1/collection/${selectedCollection}?width=${width}`)
     .then((response) => response.json())
     .then((shelfData) => {
+      hideLoading();
       renderBookshelves(shelfData, width);
     });
 });
+
+// selecting loading div
+const loader = document.querySelector("#loading");
+
+// showing loading
+function displayLoading() {
+	loader.classList.add("display");
+}
+
+// hide loading
+function hideLoading() {
+loader.classList.remove("display");
+}
 
 function renderBookshelves(shelves, maxWidth) {
   const shelvesContainer = document.getElementById("shelvesContainer");
@@ -51,6 +67,7 @@ function renderBookshelves(shelves, maxWidth) {
     shelf.forEach((book) => {
       const bookElement = document.createElement("div");
       bookElement.className = "book";
+      bookElement.innerHTML = book.title;
 
       // Adjust book width relative to the total width of books, not the max shelf width
       const relativeWidth = (parseFloat(book.width) / maxWidth) * 100;
