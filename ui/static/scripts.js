@@ -14,6 +14,11 @@ window.onload = () => {
         option.textContent = collection.title;
         dropdown.appendChild(option);
       });
+    })
+    .catch((error) => {
+      hideLoading();
+      console.error(error);
+      alert("An error occurred while fetching list of books");
     });
 };
 
@@ -31,6 +36,11 @@ document.getElementById("loadShelf").addEventListener("click", () => {
     .then((shelfData) => {
       hideLoading();
       renderBookshelves(shelfData, width);
+    })
+    .catch((error) => {
+      hideLoading();
+      console.error(error);
+      alert("An error occurred while fetching the book collection.");
     });
 });
 
